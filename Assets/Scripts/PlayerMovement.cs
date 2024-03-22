@@ -1,19 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 
 {
     [SerializeField]
-    Transform leftLeg;
+    GameObject leftLeg;
     [SerializeField]
-    Transform rightLeg;
+    GameObject rightLeg;
+    private Collider leftLegCollider;
+    private Collider rightLegCollider;
 
     public Rigidbody rb;
-    public bool isGrounded;
 
     [Header("Player Movement")]
     public float forwardForce = 10;
@@ -31,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         PID = new PIDController(xP, xI, xD);
+        leftLegCollider = leftLeg.GetComponent<Collider>();
+        rightLegCollider = rightLeg.GetComponent<Collider>();
         
     }
 
@@ -38,8 +39,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // check if the player is on the ground
-        isGrounded = Physics.Raycast(leftLeg.position, Vector3.down, 0.2f) || Physics.Raycast(rightLeg.position, Vector3.down, 0.2f);
-
+        
+        
         // Run function for forward jump
         if (Input.GetAxis("Vertical") > 0)
         {
@@ -50,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         InAir(rb);
 
         // Jump up
-        if (Input.GetAxis("Jump") > 0 && isGrounded)
+        if (Input.GetAxis("Jump") > 0 && IsGrounded)
         {
             Jump();
         }
@@ -64,6 +65,24 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    
+// check if the player is on the ground
+    public bool IsGrounded
+    {
+        get
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.6f))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     private void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -71,22 +90,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void InAir(Rigidbody rb)
     {
-        if (!isGrounded)
+        if (!IsGrounded)
         {
             // Stabalize the player rotation
             print("stabilizing");
-            var Angle = PID.Update(Time.deltaTime, rb.rotation.x, 0);
-            Vector3 xAngle = rb.rotation.eulerAngles;
-            rb.rotation = Quaternion.Euler(Angle, xAngle.y, xAngle.z);
+            var newXAngle = PID.Update(Time.deltaTime, rb.rotation.x, 0);
+            var newZAngle = PID.Update(Time.deltaTime, rb.rotation.z, 0);
+            Vector3 currentAngle = rb.rotation.eulerAngles;
+            rb.rotation = Quaternion.Euler(newXAngle, currentAngle.y, newZAngle);
         }
     }
 
     private void ForwardMovement(Rigidbody rb)
     {
-        if (isGrounded)
+        if (IsGrounded)
         {
-            rb.AddForceAtPosition(Vector3.forward * forwardForce, leftLeg.position, ForceMode.Impulse);
-            rb.AddForceAtPosition(Vector3.forward * forwardForce, rightLeg.position, ForceMode.Impulse);
+            rb.AddForceAtPosition(Vector3.forward * forwardForce, leftLeg.transform.position, ForceMode.Impulse);
+            rb.AddForceAtPosition(Vector3.forward * forwardForce, rightLeg.transform.position, ForceMode.Impulse);
         }
     }
 }
