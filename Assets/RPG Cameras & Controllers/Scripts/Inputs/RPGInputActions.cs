@@ -253,6 +253,15 @@ namespace JohnStairs.RCC.Inputs
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Punch"",
+                    ""type"": ""Button"",
+                    ""id"": ""38dc775c-c6e8-44d2-a5c5-646f71489313"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -849,6 +858,17 @@ namespace JohnStairs.RCC.Inputs
                     ""action"": ""Cancel Climbing"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""304d4657-16c2-4aab-8d95-7f0b0930582d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Punch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -882,6 +902,7 @@ namespace JohnStairs.RCC.Inputs
             m_Character_ZoomToMinDistance = m_Character.FindAction("Zoom To Min Distance", throwIfNotFound: true);
             m_Character_ZoomToMaxDistance = m_Character.FindAction("Zoom To Max Distance", throwIfNotFound: true);
             m_Character_ToggleMenuCursor = m_Character.FindAction("Toggle Menu Cursor", throwIfNotFound: true);
+            m_Character_Punch = m_Character.FindAction("Punch", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -968,6 +989,7 @@ namespace JohnStairs.RCC.Inputs
         private readonly InputAction m_Character_ZoomToMinDistance;
         private readonly InputAction m_Character_ZoomToMaxDistance;
         private readonly InputAction m_Character_ToggleMenuCursor;
+        private readonly InputAction m_Character_Punch;
         public struct CharacterActions
         {
             private @RPGInputActions m_Wrapper;
@@ -997,6 +1019,7 @@ namespace JohnStairs.RCC.Inputs
             public InputAction @ZoomToMinDistance => m_Wrapper.m_Character_ZoomToMinDistance;
             public InputAction @ZoomToMaxDistance => m_Wrapper.m_Character_ZoomToMaxDistance;
             public InputAction @ToggleMenuCursor => m_Wrapper.m_Character_ToggleMenuCursor;
+            public InputAction @Punch => m_Wrapper.m_Character_Punch;
             public InputActionMap Get() { return m_Wrapper.m_Character; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1081,6 +1104,9 @@ namespace JohnStairs.RCC.Inputs
                 @ToggleMenuCursor.started += instance.OnToggleMenuCursor;
                 @ToggleMenuCursor.performed += instance.OnToggleMenuCursor;
                 @ToggleMenuCursor.canceled += instance.OnToggleMenuCursor;
+                @Punch.started += instance.OnPunch;
+                @Punch.performed += instance.OnPunch;
+                @Punch.canceled += instance.OnPunch;
             }
 
             private void UnregisterCallbacks(ICharacterActions instance)
@@ -1160,6 +1186,9 @@ namespace JohnStairs.RCC.Inputs
                 @ToggleMenuCursor.started -= instance.OnToggleMenuCursor;
                 @ToggleMenuCursor.performed -= instance.OnToggleMenuCursor;
                 @ToggleMenuCursor.canceled -= instance.OnToggleMenuCursor;
+                @Punch.started -= instance.OnPunch;
+                @Punch.performed -= instance.OnPunch;
+                @Punch.canceled -= instance.OnPunch;
             }
 
             public void RemoveCallbacks(ICharacterActions instance)
@@ -1204,6 +1233,7 @@ namespace JohnStairs.RCC.Inputs
             void OnZoomToMinDistance(InputAction.CallbackContext context);
             void OnZoomToMaxDistance(InputAction.CallbackContext context);
             void OnToggleMenuCursor(InputAction.CallbackContext context);
+            void OnPunch(InputAction.CallbackContext context);
         }
     }
 }
