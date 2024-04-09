@@ -48,7 +48,7 @@ public class SpringTongue : MonoBehaviour
         {
             float distance = Vector3.Distance(rb.transform.position, mouth.position);
             // distance from the tongue to the mouth
-            if (distance >= spring.maxDistance-0.5f)
+            if (distance >= spring.maxDistance)
             {
 
                 Debug.Log("retracting");
