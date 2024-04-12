@@ -808,6 +808,7 @@ GameObject:
   - component: {fileID: 941477302}
   - component: {fileID: 941477301}
   - component: {fileID: 941477300}
+  - component: {fileID: 941477306}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -949,6 +950,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &941477306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941477299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197721f3ace1b56469baa46b2623a04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1120654312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1115,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.79, y: 2.97, z: -9.91}
-  m_LocalScale: {x: 1.13, y: 5, z: -6.67}
+  m_LocalScale: {x: 1.13, y: 5, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1321,11 +1334,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6927383954351545055, guid: 83ece2cde1f49594f8f375e7766ccf64,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1984974563}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83ece2cde1f49594f8f375e7766ccf64, type: 3}
 --- !u!1 &1856900682
 GameObject:
@@ -1677,28 +1686,6 @@ MonoBehaviour:
   UseLegacyInputSystem: 0
   LogInputWarnings: 1
   NormalizeInputValues: 0
---- !u!1 &1984974562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6927383954351545055, guid: 83ece2cde1f49594f8f375e7766ccf64,
-    type: 3}
-  m_PrefabInstance: {fileID: 1840642371}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1984974563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1984974562}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72b91e6a9b779fd4f96d49509a6cbafe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tounge: {fileID: 0}
-  toungeSpeed: 10
-  toungeLength: 5.18
-  rb: {fileID: 0}
 --- !u!1 &2062360449
 GameObject:
   m_ObjectHideFlags: 0
