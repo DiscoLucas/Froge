@@ -66,6 +66,7 @@ public class ToungeAttack : MonoBehaviour
 
     private void OnPunch()
     {
+        throw new NotImplementedException();
         isExtending = true;
         rb.useGravity = true;
         rb.AddForce(transform.forward * toungeSpeed, ForceMode.Impulse);

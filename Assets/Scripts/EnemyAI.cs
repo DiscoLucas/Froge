@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,18 +13,27 @@ public class EnemyAI : MonoBehaviour
     float minWaitTime = 1f;
     float maxWaitTime = 5f;
     bool isWaiting = false;
-    float runSpeed = 10f;
-    float walkSpeed = 5f;
-    float fov = 50f;
-    float viewDistance = 110f;
+    [Header("Physical Attributes")]
+    public float runSpeed = 10f;
+    public float walkSpeed = 5f;
+    public float fov = 50f;
+    public int viewDistance = 10;
+    [Header("Combat Attributes")]
+    public float attackDistance = 0.5f;
+    public float attackCooldown = 2f;
+    public float alertTime = 10f;
+    public bool isAlerted = false;
+    public float alertFOVModifier = 1.5f;
 
-    Transform player;
+    Transform playerPos;
+    GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerPos = player.transform;
         Patrol();
     }
 
@@ -40,10 +50,10 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(Wait(Patrol));
         }*/
         
-        Debug.DrawRay(transform.position, transform.forward * viewDistance, Color.red);
+        
         if (CanSeePlayer())
         {
-            Debug.Log("player is in sight");
+            Chase();
         }
         else if (!agent.pathPending && agent.remainingDistance < 0.5f)
             {
@@ -93,7 +103,7 @@ public class EnemyAI : MonoBehaviour
             
 
         agent.destination = waypoints[destPoint].position;
-        Debug.Log("Going to waypoint " + destPoint);
+        //Debug.Log("Going to waypoint " + destPoint);
 
         // Choose the next destination point when the agent gets to one
         destPoint = (destPoint + 1) % waypoints.Length;
@@ -101,27 +111,46 @@ public class EnemyAI : MonoBehaviour
 
     void Chase()
     {
+        // Draw yellow cube above the agent
+        Debug.DrawRay(transform.position, Vector3.up, Color.yellow);
         agent.speed = runSpeed;
-        agent.destination = player.position;
+        agent.destination = playerPos.position;
+
+        // Attack the player when there within a certain distance
+        if (Vector3.Distance(transform.position, playerPos.position) < attackDistance)
+        {
+            Attack();
+        }
     }
     
     void Attack()
     {
-        agent.speed = walkSpeed;
-        agent.destination = player.position;
+        Debug.DrawRay(transform.position, Vector3.up, Color.red);
+        agent.destination = playerPos.position;
+        // Checking attack cooldown
+        if (Time.time > attackCooldown)
+        {
+            Debug.Log("Attacking player");
+            //player.GetComponent<PlayerHealth>().TakeDamage(1);
+            attackCooldown = Time.time + attackCooldown;
+            Debug.Log("Attack cooldown: " + attackCooldown);
+        }
     }
 
-    //TODO: fix this function so that it can actually see the player
     bool CanSeePlayer()
     {
-        Vector3 targetDirection = player.position - transform.position;
+        Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
         float angle = Vector3.Angle(transform.forward, targetDirection);
 
         if (angle < fov * 0.5f)
         {
+            //Debug.Log("Player is in field of view");
             RaycastHit hit;
+            
             if (Physics.Raycast(transform.position, targetDirection, out hit, viewDistance))
             {
+                Debug.DrawRay(transform.position, targetDirection, Color.red);
+                //Debug.Log("Hit: " + hit.collider.name);
                 if (hit.collider.CompareTag("Player"))
                 {
                     return true;
