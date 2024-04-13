@@ -10,20 +10,28 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent agent;
     public Transform[] waypoints;
     int destPoint = 0;
-    float minWaitTime = 1f;
-    float maxWaitTime = 5f;
-    bool isWaiting = false;
+    
     [Header("Physical Attributes")]
     public float runSpeed = 10f;
     public float walkSpeed = 5f;
     public float fov = 50f;
+    private float currentFOV;
     public int viewDistance = 10;
+    public float lookSpeed;
+
     [Header("Combat Attributes")]
     public float attackDistance = 0.5f;
     public float attackCooldown = 2f;
     public float alertTime = 10f;
-    public bool isAlerted = false;
     public float alertFOVModifier = 1.5f;
+
+    [Header("Debugging")]
+    public string stateDisplay;
+    public bool startLookout;
+    public bool isAlerted = false;
+    public bool isLooking;
+    [Tooltip("While alerted, the enemy will always be able to see the player within this range.")]
+    public float situationalAwareness = 3f;
 
     Transform playerPos;
     GameObject player;
@@ -53,6 +61,8 @@ public class EnemyAI : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.PATROLLING:
+                stateDisplay = "Patrolling";
+                currentFOV = fov;
                 Patrol();
                 if (CanSeePlayer())
                 {
@@ -61,6 +71,8 @@ public class EnemyAI : MonoBehaviour
                 }
                 break;
             case EnemyState.ALERT:
+                stateDisplay = "Alert";
+                currentFOV = fov * alertFOVModifier;
                 Chase();
                 // if the player is no longer in sight, start the alert timer
                 if (!CanSeePlayer())
@@ -72,8 +84,13 @@ public class EnemyAI : MonoBehaviour
                         currentState = EnemyState.PATROLLING;
                     }
                 }
+                if (Vector3.Distance(transform.position, playerPos.position) < attackDistance)
+                {
+                    currentState = EnemyState.ATTACKING;
+                }
                 break;
             case EnemyState.ATTACKING:
+                stateDisplay = "Attacking";
                 Attack();
                 if (Vector3.Distance(transform.position, playerPos.position) > attackDistance)
                 {
@@ -88,7 +105,8 @@ public class EnemyAI : MonoBehaviour
         Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
         float angle = Vector3.Angle(transform.forward, targetDirection);
 
-        if (angle < fov * 0.5f)
+        if (angle < currentFOV * 0.5f ||
+            isAlerted && Vector3.Distance(transform.position, playerPos.position) < situationalAwareness)
         {
             //Debug.Log("Player is in field of view");
             RaycastHit hit;
@@ -107,7 +125,6 @@ public class EnemyAI : MonoBehaviour
     }
     void Patrol()
     {
-        isWaiting = false;
         agent.speed = walkSpeed;
         // Chek if any waypoints have been set up
         if (waypoints.Length == 0)
@@ -118,9 +135,6 @@ public class EnemyAI : MonoBehaviour
         agent.destination = waypoints[destPoint].position;
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-            //StartCoroutine(Wait(Patrol));
-            isWaiting = true;
-
             // Choose the next destination point when the agent gets to one
             destPoint = (destPoint + 1) % waypoints.Length;
         }
@@ -130,54 +144,60 @@ public class EnemyAI : MonoBehaviour
         // Draw yellow ray above the agent
         Debug.DrawRay(transform.position, Vector3.up, Color.yellow);
         agent.speed = runSpeed;
+        // transform.LookAt(playerPos.position, Vector3.up); TODO: make the AI face the player only in the XZ plane
 
         // Look for the player
         if (CanSeePlayer())
         {
             agent.destination = playerPos.position;
+            isLooking = false;
         }
-        else
+        else if (!isLooking)
         {
             // Player lost, look from side to side
-            Debug.Log("Player lost, looking around");
-            //agent.isStopped = true;
-            LookAround();
+           StartCoroutine(LookAround());
+           isLooking = true;
         }
     }
     private IEnumerator LookAround() // TODO: fix this
     {
+        stateDisplay = "Alert" + " - Looking around";
+        agent.isStopped = true;
         float lookTimer = 0f;
-        float lookAngle = 0f;
+        float lookAngle = 0f; 
         float lookRange = 60f;
 
         while (!CanSeePlayer())
         {
             lookTimer += Time.deltaTime;
-            lookAngle = Mathf.Sin(lookTimer) * lookRange;
+            lookAngle = Mathf.Sin(lookTimer * lookSpeed / Mathf.PI) * lookRange;
             transform.RotateAround(transform.position, Vector3.up, lookAngle * Time.deltaTime);
             yield return null;
         }
 
         // Player found again, resume chase
+        isLooking = false;
         agent.isStopped = false;
         agent.destination = playerPos.position;
+        StopCoroutine(LookAround());
     }
-
 
     void Attack()
     {
         Debug.DrawRay(transform.position, Vector3.up, Color.red);
         agent.destination = playerPos.position;
-        transform.LookAt(playerPos);
-        // Checking attack cooldown
+        // transform.LookAt(playerPos.position, Vector3.up); TODO: make the AI face the player only in the XZ plane
+        // checking if the time since the last attack is greater than the cooldown
         if (Time.time > attackCooldown)
         {
+            // Attack the player
             Debug.Log("Attacking player");
-            //player.GetComponent<PlayerHealth>().TakeDamage(1);
+            // Reset the attack cooldown
             attackCooldown = Time.time + attackCooldown;
-            Debug.Log("Attack cooldown: " + attackCooldown);
         }
     }
+
+    
     /*
     /// <summary>
     /// runs a function after a random amount of time
