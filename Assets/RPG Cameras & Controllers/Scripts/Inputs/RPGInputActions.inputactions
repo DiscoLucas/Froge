@@ -494,17 +494,6 @@
                 },
                 {
                     "name": "",
-                    "id": "cf47230f-efb9-4dd4-9f55-f44ca9ed55d5",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Autorunning",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "dd88586f-911b-4d3d-aa90-ced13887418a",
                     "path": "<Gamepad>/dpad/left",
                     "interactions": "",
@@ -858,7 +847,7 @@
                 {
                     "name": "",
                     "id": "dffc0936-5049-4ab6-a818-4f88665b854d",
-                    "path": "<Keyboard>/x",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
