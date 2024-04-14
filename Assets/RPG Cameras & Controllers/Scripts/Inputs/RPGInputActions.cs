@@ -882,7 +882,7 @@ namespace JohnStairs.RCC.Inputs
                 {
                     ""name"": """",
                     ""id"": ""dffc0936-5049-4ab6-a818-4f88665b854d"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
