@@ -262,6 +262,15 @@ namespace JohnStairs.RCC.Inputs
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Grapple"",
+                    ""type"": ""Button"",
+                    ""id"": ""b32ec0cf-2644-40d8-ac81-c55af69fb657"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -869,6 +878,28 @@ namespace JohnStairs.RCC.Inputs
                     ""action"": ""Punch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dffc0936-5049-4ab6-a818-4f88665b854d"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grapple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""992ab970-a490-4478-9b17-a6cc94e683fb"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grapple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -903,6 +934,7 @@ namespace JohnStairs.RCC.Inputs
             m_Character_ZoomToMaxDistance = m_Character.FindAction("Zoom To Max Distance", throwIfNotFound: true);
             m_Character_ToggleMenuCursor = m_Character.FindAction("Toggle Menu Cursor", throwIfNotFound: true);
             m_Character_Punch = m_Character.FindAction("Punch", throwIfNotFound: true);
+            m_Character_Grapple = m_Character.FindAction("Grapple", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -990,6 +1022,7 @@ namespace JohnStairs.RCC.Inputs
         private readonly InputAction m_Character_ZoomToMaxDistance;
         private readonly InputAction m_Character_ToggleMenuCursor;
         private readonly InputAction m_Character_Punch;
+        private readonly InputAction m_Character_Grapple;
         public struct CharacterActions
         {
             private @RPGInputActions m_Wrapper;
@@ -1020,6 +1053,7 @@ namespace JohnStairs.RCC.Inputs
             public InputAction @ZoomToMaxDistance => m_Wrapper.m_Character_ZoomToMaxDistance;
             public InputAction @ToggleMenuCursor => m_Wrapper.m_Character_ToggleMenuCursor;
             public InputAction @Punch => m_Wrapper.m_Character_Punch;
+            public InputAction @Grapple => m_Wrapper.m_Character_Grapple;
             public InputActionMap Get() { return m_Wrapper.m_Character; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1107,6 +1141,9 @@ namespace JohnStairs.RCC.Inputs
                 @Punch.started += instance.OnPunch;
                 @Punch.performed += instance.OnPunch;
                 @Punch.canceled += instance.OnPunch;
+                @Grapple.started += instance.OnGrapple;
+                @Grapple.performed += instance.OnGrapple;
+                @Grapple.canceled += instance.OnGrapple;
             }
 
             private void UnregisterCallbacks(ICharacterActions instance)
@@ -1189,6 +1226,9 @@ namespace JohnStairs.RCC.Inputs
                 @Punch.started -= instance.OnPunch;
                 @Punch.performed -= instance.OnPunch;
                 @Punch.canceled -= instance.OnPunch;
+                @Grapple.started -= instance.OnGrapple;
+                @Grapple.performed -= instance.OnGrapple;
+                @Grapple.canceled -= instance.OnGrapple;
             }
 
             public void RemoveCallbacks(ICharacterActions instance)
@@ -1234,6 +1274,7 @@ namespace JohnStairs.RCC.Inputs
             void OnZoomToMaxDistance(InputAction.CallbackContext context);
             void OnToggleMenuCursor(InputAction.CallbackContext context);
             void OnPunch(InputAction.CallbackContext context);
+            void OnGrapple(InputAction.CallbackContext context);
         }
     }
 }

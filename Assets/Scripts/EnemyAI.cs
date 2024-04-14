@@ -135,6 +135,7 @@ public class EnemyAI : MonoBehaviour
         agent.destination = waypoints[destPoint].position;
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
+            //TODO: start coroutine to wait for a random amount of time or edit LookAround to work with the patrol state
             // Choose the next destination point when the agent gets to one
             destPoint = (destPoint + 1) % waypoints.Length;
         }
@@ -159,9 +160,9 @@ public class EnemyAI : MonoBehaviour
            isLooking = true;
         }
     }
-    private IEnumerator LookAround() // TODO: fix this
+    private IEnumerator LookAround()
     {
-        stateDisplay = "Alert" + " - Looking around";
+        stateDisplay = currentState + " - Looking around";
         agent.isStopped = true;
         float lookTimer = 0f;
         float lookAngle = 0f; 
