@@ -8,6 +8,7 @@ TagManager:
   - Stone
   - Enemy
   - Tongue attack
+  - Place
   layers:
   - Default
   - TransparentFX
