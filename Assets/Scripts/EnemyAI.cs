@@ -50,6 +50,11 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("No player found in the scene, disabling AI");
+            enabled = false;
+        }
         playerPos = player.transform;
         currentState = EnemyState.PATROLLING;
     }
@@ -160,7 +165,7 @@ public class EnemyAI : MonoBehaviour
            isLooking = true;
         }
     }
-    private IEnumerator LookAround()
+    private IEnumerator LookAround() // TODO: fix AI gettig stuck in this coroutine
     {
         stateDisplay = currentState + " - Looking around";
         agent.isStopped = true;
@@ -173,7 +178,11 @@ public class EnemyAI : MonoBehaviour
             lookTimer += Time.deltaTime;
             lookAngle = Mathf.Sin(lookTimer * lookSpeed / Mathf.PI) * lookRange;
             transform.RotateAround(transform.position, Vector3.up, lookAngle * Time.deltaTime);
-            yield return null;
+            if (lookTimer > alertTime)
+            {
+                yield return null;
+            }
+            
         }
 
         // Player found again, resume chase

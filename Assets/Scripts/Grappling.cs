@@ -18,7 +18,6 @@ public class Grappling : MonoBehaviour
     public Transform Mouth;
     public LayerMask whatIsGrappleable;
     public LineRenderer lr;
-    public CharacterController cc;
 
     [Header("Grapple Settings")]
     public float maxGrappleDistance;
@@ -41,7 +40,6 @@ public class Grappling : MonoBehaviour
         grappleAction = inputActions.Character.Grapple;
         grappleAction.performed += ctx => StartGrapple();
         grappleAction.Enable();
-        cc = GetComponent<CharacterController>();
     }
 
     void Update()
@@ -127,7 +125,7 @@ public class Grappling : MonoBehaviour
 
         return velocityXZ + velocityY;
     }
-
+    
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
         activeGrapple = true;
@@ -136,6 +134,8 @@ public class Grappling : MonoBehaviour
         Invoke(nameof(SetVelocity), 0.1f);
         //cc.attachedRigidbody.velocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
     }
+    
+
 
     private Vector3 velocityToSet;
     
@@ -143,11 +143,8 @@ public class Grappling : MonoBehaviour
     private void SetVelocity()
     {
         Debug.Log("Setting velocity");
-        Debug.Log(cc.attachedRigidbody);
         //cc.attachedRigidbody.velocity = velocityToSet;
-        cc.SimpleMove(velocityToSet);
         //Debug.Log("Velocity set: " + cc.attachedRigidbody.velocity);
     }
 
-    
 }

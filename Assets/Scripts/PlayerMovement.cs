@@ -1,112 +1,158 @@
-using System;
-using Unity.VisualScripting;
+using JohnStairs.RCC.Inputs;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+//Sauce https://youtu.be/f473C43s8nE?si=3GUVweo51ebm9OZ9
 public class PlayerMovement : MonoBehaviour
+{/*
+    [Header("References")]
+    Rigidbody rb;
+    RPGInputActions inputActions;
+    InputAction moveAction;
+    InputAction lookAction;
+    public Transform orientation;  
 
-{
-    [SerializeField]
-    GameObject leftLeg;
-    [SerializeField]
-    GameObject rightLeg;
-    private Collider leftLegCollider;
-    private Collider rightLegCollider;
+    [Header("Movement Attributes")]
+    public float moveSpeed = 5f;
+    Vector2 moveInput;
+    Vector3 moveDirection;
 
-    public Rigidbody rb;
-
-    [Header("Player Movement")]
-    public float forwardForce = 10;
-    public float rotationForce = 50;
-    public float jumpForce = 5;
-    
-    PIDController PID;
-    [Header("PID Controller - X rotation")]
-    public float xP = 1;
-    public float xI = 1;
-    public float xD = 1;
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        PID = new PIDController(xP, xI, xD);
-        leftLegCollider = leftLeg.GetComponent<Collider>();
-        rightLegCollider = rightLeg.GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        inputActions = RPGInputManager.GetInputActions();
+        moveAction = inputActions.Character.Movement;
+        lookAction = inputActions.Character.Look;
+    }
+
+    private void Update()
+    {
+        
         
     }
 
-    
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        // check if the player is on the ground
-        
-        
-        // Run function for forward jump
-        if (Input.GetAxis("Vertical") > 0)
-        {
-            ForwardMovement(rb);
-        }
+        moveInput = moveAction.ReadValue<Vector2>();
+        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+        rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Force);
+    }
 
-        // Run function for stabilizing the player rotation
-        InAir(rb);
+    private void MovePlayer()
+    {
+        
+    }*/
 
-        // Jump up
-        if (Input.GetAxis("Jump") > 0 && IsGrounded)
+    [Header("Movement")]
+    public float moveSpeed;
+
+    public float groundDrag;
+
+    public float jumpForce;
+    public float jumpCooldown;
+    public float airMultiplier;
+    bool readyToJump;
+
+    [HideInInspector] public float walkSpeed;
+    [HideInInspector] public float sprintSpeed;
+
+    [Header("Keybinds")]
+    public KeyCode jumpKey = KeyCode.Space;
+
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    bool grounded;
+
+    public Transform orientation;
+
+    float horizontalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+
+    Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
+        readyToJump = true;
+    }
+
+    private void Update()
+    {
+        // ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
+
+        MyInput();
+        SpeedControl();
+
+        // handle drag
+        if (grounded)
+            rb.drag = groundDrag;
+        else
+            rb.drag = 0;
+    }
+
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void MyInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        // when to jump
+        if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
+            readyToJump = false;
+
             Jump();
-        }
-        
 
-        // rotate the player
-        if (Input.GetAxis("Horizontal") != 0)
-        {
-            rb.AddTorque(Vector3.up * rotationForce * Input.GetAxis("Horizontal"));
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
-        
     }
 
-    
-// check if the player is on the ground
-    public bool IsGrounded
+    private void MovePlayer()
     {
-        get
+        // calculate movement direction
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        
+        // on ground
+        if (grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        // in air
+        else if (!grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+    }
+
+    private void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        // limit velocity if needed
+        if (flatVel.magnitude > moveSpeed)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.6f))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
 
     private void Jump()
     {
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-    }
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-    private void InAir(Rigidbody rb)
-    {
-        if (!IsGrounded)
-        {
-            // Stabalize the player rotation
-            print("stabilizing");
-            var newXAngle = PID.Update(Time.deltaTime, rb.rotation.x, 0);
-            var newZAngle = PID.Update(Time.deltaTime, rb.rotation.z, 0);
-            Vector3 currentAngle = rb.rotation.eulerAngles;
-            rb.rotation = Quaternion.Euler(newXAngle, currentAngle.y, newZAngle);
-        }
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
-
-    private void ForwardMovement(Rigidbody rb)
+    private void ResetJump()
     {
-        if (IsGrounded)
-        {
-            rb.AddForceAtPosition(Vector3.forward * forwardForce, leftLeg.transform.position, ForceMode.Impulse);
-            rb.AddForceAtPosition(Vector3.forward * forwardForce, rightLeg.transform.position, ForceMode.Impulse);
-        }
+        readyToJump = true;
     }
 }

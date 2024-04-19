@@ -271,6 +271,15 @@ namespace JohnStairs.RCC.Inputs
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""b7335095-2136-4bad-9df8-075168b7654c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -889,6 +898,17 @@ namespace JohnStairs.RCC.Inputs
                     ""action"": ""Grapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c44750f9-a021-45df-9f29-8fdfa92854c4"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -924,6 +944,7 @@ namespace JohnStairs.RCC.Inputs
             m_Character_ToggleMenuCursor = m_Character.FindAction("Toggle Menu Cursor", throwIfNotFound: true);
             m_Character_Punch = m_Character.FindAction("Punch", throwIfNotFound: true);
             m_Character_Grapple = m_Character.FindAction("Grapple", throwIfNotFound: true);
+            m_Character_Look = m_Character.FindAction("Look", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1012,6 +1033,7 @@ namespace JohnStairs.RCC.Inputs
         private readonly InputAction m_Character_ToggleMenuCursor;
         private readonly InputAction m_Character_Punch;
         private readonly InputAction m_Character_Grapple;
+        private readonly InputAction m_Character_Look;
         public struct CharacterActions
         {
             private @RPGInputActions m_Wrapper;
@@ -1043,6 +1065,7 @@ namespace JohnStairs.RCC.Inputs
             public InputAction @ToggleMenuCursor => m_Wrapper.m_Character_ToggleMenuCursor;
             public InputAction @Punch => m_Wrapper.m_Character_Punch;
             public InputAction @Grapple => m_Wrapper.m_Character_Grapple;
+            public InputAction @Look => m_Wrapper.m_Character_Look;
             public InputActionMap Get() { return m_Wrapper.m_Character; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1133,6 +1156,9 @@ namespace JohnStairs.RCC.Inputs
                 @Grapple.started += instance.OnGrapple;
                 @Grapple.performed += instance.OnGrapple;
                 @Grapple.canceled += instance.OnGrapple;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
             }
 
             private void UnregisterCallbacks(ICharacterActions instance)
@@ -1218,6 +1244,9 @@ namespace JohnStairs.RCC.Inputs
                 @Grapple.started -= instance.OnGrapple;
                 @Grapple.performed -= instance.OnGrapple;
                 @Grapple.canceled -= instance.OnGrapple;
+                @Look.started -= instance.OnLook;
+                @Look.performed -= instance.OnLook;
+                @Look.canceled -= instance.OnLook;
             }
 
             public void RemoveCallbacks(ICharacterActions instance)
@@ -1264,6 +1293,7 @@ namespace JohnStairs.RCC.Inputs
             void OnToggleMenuCursor(InputAction.CallbackContext context);
             void OnPunch(InputAction.CallbackContext context);
             void OnGrapple(InputAction.CallbackContext context);
+            void OnLook(InputAction.CallbackContext context);
         }
     }
 }
