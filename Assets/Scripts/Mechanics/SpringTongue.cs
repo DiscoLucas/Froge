@@ -32,9 +32,9 @@ public class SpringTongue : MonoBehaviour
 
     private void OnPunch()
     {
-        //spring.spring = 0;
+        spring.spring = 0;
         isExtending = true;
-        rb.useGravity = true;
+        //rb.useGravity = true;
         rb.AddForce(transform.forward * tongueForce, ForceMode.Impulse);
         
     }

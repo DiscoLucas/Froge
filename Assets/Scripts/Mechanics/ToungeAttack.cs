@@ -7,15 +7,18 @@ using System;
 
 public class ToungeAttack : MonoBehaviour
 {
+    [Header("References")]
     private RPGInputActions inputActions;
     InputAction punchAction;
+    public Rigidbody rb;
+    public SpringJoint spring;
+    public Collider tongueCollider;
+    public Transform mouthPos;
 
-    public GameObject tounge;
-    public float toungeSpeed = 10f;
-    public float toungeLength = 10f;
-    [SerializeField]
-    Vector3 startPos;
-    bool isExtending;
+    [Header("Forces")]
+    public float tongueForce = 10f;
+    public float retractionSpringForce = 100f;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -24,35 +27,41 @@ public class ToungeAttack : MonoBehaviour
         punchAction = inputActions.Character.Punch;
         punchAction.performed += ctx => OnPunch();
         punchAction.Enable();
+        rb = rb.GetComponentInChildren<Rigidbody>();
+        rb.useGravity = false;
+        rb.freezeRotation = true;
 
+        spring = GetComponent<SpringJoint>();
+        spring.spring = 0;
+        
     }
 
     private void OnPunch()
     {
-        throw new NotImplementedException();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*var maxDistance = Vector3.Distance(tounge.transform.position, tounge.transform.position * toungeLength);
-        if (maxDistance > toungeLength)
-        {
-            RetractTongue();
-        }*/
-
-        
-    }
-
-    /*private void RetractTongue()
-    {
-        Debug.Log("Retracting");
-        rb.useGravity = false;
         rb.velocity = Vector3.zero;
-        //rb.AddForce((startPos - tounge.transform.position).normalized * toungeSpeed, ForceMode.Impulse);
-        rb.MovePosition(startPos);
+        spring.spring = 0;
+        rb.AddForce(Vector3.forward * tongueForce, ForceMode.Impulse);
+    }
+
+    private void Update()
+    {
+        if (Vector3.Distance(transform.position, mouthPos.position) >= spring.maxDistance)
+        {
+            Invoke(nameof(RetractTongue), 0.1f);
+        }
+    }
+
+    private void RetractTongue()
+    {
+        spring.spring = retractionSpringForce;
+    }
+
+    private void OnTriggerEnter(Collider mouth)
+    {
+        // Reset the tongue position
+        rb.MovePosition(mouthPos.position);
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         
-    }*/
-
-
+    }
 }
