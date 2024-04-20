@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    public bool freezeMovement;
 
     [HideInInspector] public float walkSpeed;
     [HideInInspector] public float sprintSpeed;
@@ -84,9 +85,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (freezeMovement)
+            return;
+
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
-
+        
         MyInput();
         SpeedControl();
 
@@ -154,5 +158,45 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    /// <summary>
+    /// Calculate the kinematics of a required Vector to go from startPoint to endPoint with a given trajectory height.
+    /// </summary>
+    /// <param name="startPoint">Where you start</param>
+    /// <param name="endPoint">Where you want to go</param>
+    /// <param name="trajectoryHeight"></param>
+    /// <returns></returns>
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
+
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        activateGrapple = true;
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Debug.Log("Velocity to set: " + velocityToSet);
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        rb.velocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+    }
+
+    private bool activateGrapple;
+    private Vector3 velocityToSet;
+
+
+    private void SetVelocity()
+    {
+        Debug.Log("Setting velocity");
+        rb.velocity = velocityToSet;
+        //Debug.Log("Velocity set: " + cc.attachedRigidbody.velocity);
     }
 }

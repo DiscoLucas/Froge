@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 public class Grappling : MonoBehaviour
 {
     [Header("References")]
-    RPGController pm;
+    PlayerMovement pm;
     RPGInputActions inputActions;
     InputAction grappleAction;
     public Transform cam;
@@ -24,26 +24,30 @@ public class Grappling : MonoBehaviour
     public float grappleDelay;
     Vector3 grapplePoint;
     public float overShootYAxis;
+    public KeyCode grappleKey = KeyCode.F;
 
     [Header("Cooldown")]
     public float grapplingCooldown;
     float grapplingCooldownTimer;
 
-    bool isGrappling;
+    bool grappling;
     public bool activeGrapple;
 
     // Start is called before the first frame update
     void Start()
     {
-        pm = GetComponent<RPGController>();
-        inputActions = RPGInputManager.GetInputActions();
-        grappleAction = inputActions.Character.Grapple;
-        grappleAction.performed += ctx => StartGrapple();
-        grappleAction.Enable();
+        pm = GetComponent<PlayerMovement>();
+        //pm = GetComponent<RPGController>();
+        //inputActions = RPGInputManager.GetInputActions();
+        //grappleAction = inputActions.Character.Grapple;
+        //grappleAction.performed += ctx => StartGrapple();
+        //grappleAction.Enable();
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(grappleKey)) StartGrapple();
+        
         if (grapplingCooldownTimer > 0)
         {
             grapplingCooldownTimer -= Time.deltaTime;
@@ -52,7 +56,7 @@ public class Grappling : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (isGrappling)
+        if (grappling)
         {
             lr.SetPosition(0, Mouth.position);
         }
@@ -66,9 +70,9 @@ public class Grappling : MonoBehaviour
     {
         if (grapplingCooldownTimer > 0) return;
 
-        isGrappling = true;
+        grappling = true;
 
-        pm.ActivateControl = false;
+        pm.freezeMovement = true;
 
         if (Physics.Raycast(Mouth.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
         {
@@ -87,7 +91,7 @@ public class Grappling : MonoBehaviour
 
     void ExecuteGrapple()
     {
-        pm.ActivateControl = true;
+        pm.freezeMovement = false;
 
         Vector3 lowestPoint = new(transform.position.x, transform.position.y -1f, transform.position.z);
 
@@ -96,55 +100,20 @@ public class Grappling : MonoBehaviour
 
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overShootYAxis;
         Debug.Log("lowestPoint: " + lowestPoint + " grapplePoint: " + grapplePoint + " highestPointOnArc: " + highestPointOnArc);
-        JumpToPosition(grapplePoint, highestPointOnArc);
+        pm.JumpToPosition(grapplePoint, highestPointOnArc);
         Invoke(nameof(StopGrapple), 1f);
     }
 
     void StopGrapple()
     {
-        pm.ActivateControl = true;
-        isGrappling = false;
+        pm.freezeMovement = false;
+        grappling = false;
         grapplingCooldownTimer = grapplingCooldown;
         lr.enabled = false;
     }
-    /// <summary>
-    /// Calculate the kinematics of a required Vector to go from startPoint to endPoint with a given trajectory height.
-    /// </summary>
-    /// <param name="startPoint">Where you start</param>
-    /// <param name="endPoint">Where you want to go</param>
-    /// <param name="trajectoryHeight"></param>
-    /// <returns></returns>
-    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    public bool isGrappling()
     {
-        float gravity = Physics.gravity.y;
-        float displacementY = endPoint.y - startPoint.y;
-        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0, endPoint.z - startPoint.z);
-
-        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-        return velocityXZ + velocityY;
-    }
-    
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
-    {
-        activeGrapple = true;
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        Debug.Log("Velocity to set: " + velocityToSet);
-        Invoke(nameof(SetVelocity), 0.1f);
-        //cc.attachedRigidbody.velocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-    }
-    
-
-
-    private Vector3 velocityToSet;
-    
-
-    private void SetVelocity()
-    {
-        Debug.Log("Setting velocity");
-        //cc.attachedRigidbody.velocity = velocityToSet;
-        //Debug.Log("Velocity set: " + cc.attachedRigidbody.velocity);
+        return grappling;
     }
 
 }
