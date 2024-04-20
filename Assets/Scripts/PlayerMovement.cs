@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
-    public bool freezeMovement;
+    [HideInInspector] public bool freezeMovement;
 
     [HideInInspector] public float walkSpeed;
     [HideInInspector] public float sprintSpeed;
@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    public bool grounded;
 
     public Transform orientation;
 
