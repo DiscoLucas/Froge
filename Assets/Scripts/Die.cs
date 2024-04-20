@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class is responsible for handling the death of the enemy.
+/// It's activated when the enemy is hit by the player's tongue.
+/// </summary>
 public class Die : MonoBehaviour
 {
     private EnemyAI AI;
@@ -10,14 +12,9 @@ public class Die : MonoBehaviour
     void Start()
     {
         AI = GetComponent<EnemyAI>();
+        AI.enabled = false;
+        Debug.Log("damn, i fucking died");
+        //TODO: implement death animation
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Tongue attack"))
-        {
-            AI.enabled = false;
-            Debug.Log("damn, i fucking died");
-            //TODO: implement death animation
-        }
-    }
+    
 }

@@ -9421,7 +9421,7 @@ GameObject:
   - component: {fileID: 941477301}
   m_Layer: 0
   m_Name: Lizard
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9573,7 +9573,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941477299}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 197721f3ace1b56469baa46b2623a04d, type: 3}
   m_Name: 
@@ -9752,15 +9752,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1090208162}
-  - component: {fileID: 1090208163}
   - component: {fileID: 1090208165}
   - component: {fileID: 1090208164}
-  - component: {fileID: 1090208167}
-  - component: {fileID: 1090208166}
   - component: {fileID: 1090208168}
-  m_Layer: 0
+  - component: {fileID: 1090208169}
+  m_Layer: 8
   m_Name: Tongue
-  m_TagString: Untagged
+  m_TagString: Tongue attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9780,33 +9778,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1658038642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1090208163
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1090208161}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 118
-  m_CollisionDetection: 0
 --- !u!23 &1090208164
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9857,48 +9828,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090208161}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!145 &1090208166
-SpringJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1090208161}
-  m_ConnectedBody: {fileID: 1658038650}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.03, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.010000169, z: -0.000000094610556}
-  serializedVersion: 2
-  m_Spring: 10
-  m_Damper: 0.2
-  m_MinDistance: 0
-  m_MaxDistance: 6
-  m_Tolerance: 0.025
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 0.00001
-  m_ConnectedMassScale: 1
---- !u!114 &1090208167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1090208161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72b91e6a9b779fd4f96d49509a6cbafe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 1090208163}
-  spring: {fileID: 1090208166}
-  tongueCollider: {fileID: 1090208168}
-  mouthPos: {fileID: 1658038642}
-  tongueForce: 10
-  retractionSpringForce: 100
 --- !u!65 &1090208168
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9912,7 +9841,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -9920,6 +9849,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1.0000001}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1090208169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090208161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed73122bb73528b4baf5bf4033b06b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tongueCollider: {fileID: 1090208168}
+  parentRB: {fileID: 1673426266}
 --- !u!43 &1117625934
 Mesh:
   m_ObjectHideFlags: 0
@@ -12976,6 +12919,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1673426264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1777521573712912007, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+    type: 3}
+  m_PrefabInstance: {fileID: 2251084089227110769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1673426265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7575570447458801819, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
@@ -12988,6 +12937,74 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 2251084089227110769}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1673426270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673426264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 235afb5e7d34acc4785fd7a267508c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tongue: {fileID: 1090208161}
+  tongueCollider: {fileID: 1090208168}
+  maxDistance: 7
+  speed: 30
+  isRetracting: 0
+  isShooting: 0
+  extendCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retractCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  time: 0
+  maxTime: 0.7
 --- !u!1 &1730171300
 GameObject:
   m_ObjectHideFlags: 0
@@ -14827,6 +14844,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Dummy
       objectReference: {fileID: 0}
+    - target: {fileID: 1777521573712912007, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3513891168312389310, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649499457926376975, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3678719598550661811, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
         type: 3}
       propertyPath: m_IsTrigger
@@ -14889,6 +14921,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7663624627158350946, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
         type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663624627158350946, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+        type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -14906,6 +14943,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1090208162}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1777521573712912007, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1673426270}
     - targetCorrespondingSourceObject: {fileID: 3649499457926376975, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
         type: 3}
       insertIndex: -1
