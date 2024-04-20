@@ -111,7 +111,7 @@ public class Grappling : MonoBehaviour
         grapplingCooldownTimer = grapplingCooldown;
         lr.enabled = false;
     }
-    public bool isGrappling()
+    public bool IsGrappling()
     {
         return grappling;
     }
