@@ -31,7 +31,6 @@ public class Grappling : MonoBehaviour
     float grapplingCooldownTimer;
 
     bool grappling;
-    public bool activeGrapple;
 
     // Start is called before the first frame update
     void Start()
