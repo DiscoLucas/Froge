@@ -25,6 +25,7 @@ public class TongueController : MonoBehaviour
         // Save the original position of the tongue
         startPosition = tongue.transform.localPosition;
         tongueCollider = tongue.GetComponent<Collider>();
+        tongueCollider.enabled = false; // Disable the collider until the tongue is extended
     }
 
     private void Update()
@@ -44,7 +45,7 @@ public class TongueController : MonoBehaviour
     }
     private void ExtendTongue()
     {
-
+        tongueCollider.enabled = true; // Enable the collider when the tongue is extended
         time += Time.deltaTime / maxTime;
         // Move tongue forward along local axis
         float curveValue = extendCurve.Evaluate(time);
@@ -72,6 +73,7 @@ public class TongueController : MonoBehaviour
         if (tongue.transform.localPosition == startPosition)
         {
             isRetracting = false;
+            tongueCollider.enabled = false; // Disable the collider when the tongue is retracted
             StopCoroutine(RetractTongue());
         }
         yield return null;

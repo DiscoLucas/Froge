@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [Header("UI")]
     public GameObject pauseMenuUI;
     public static bool gameIsPaused = false;
+    public Image[] hearts;
 
     // Start is called before the first frame update
     void Awake()
@@ -31,7 +33,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+        DontDestroyOnLoad(gameObject); // Keep the GameManager between scenes
+
         // Get references to components
         grapplingComponent = FindObjectOfType<Grappling>();
         tongueController = FindObjectOfType<TongueController>();
@@ -103,6 +106,21 @@ public class GameManager : MonoBehaviour
     internal void PlayerHit()
     {
         playerHealth--;
+        UpdateHealthUI();
         Debug.Log("Player Health: " + playerHealth);
+    }
+    private void UpdateHealthUI()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < playerHealth)
+            {
+                hearts[i].enabled = true;
+            }
+            else
+            {
+                hearts[i].enabled = false;
+            }
+        }
     }
 }
