@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +43,9 @@ public class GameManager : MonoBehaviour
 
         // hide pause menu
         pauseMenuUI.SetActive(false);
+
+        // Reset player health
+        playerHealth = 3;
     }
 
     // Update is called once per frame
@@ -95,5 +99,10 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         Resume();
     }
-    
+
+    internal void PlayerHit()
+    {
+        playerHealth--;
+        Debug.Log("Player Health: " + playerHealth);
+    }
 }

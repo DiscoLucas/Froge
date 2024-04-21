@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    GameManager gameManager;
     NavMeshAgent agent;
     public Transform[] waypoints;
     int destPoint = 0;
@@ -22,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Combat Attributes")]
     public float attackDistance = 0.5f;
     public float attackCooldown = 2f;
+    float attackCooldownTimer;
     public float alertTime = 10f;
     public float alertFOVModifier = 1.5f;
 
@@ -48,6 +50,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
@@ -96,6 +99,7 @@ public class EnemyAI : MonoBehaviour
                 break;
             case EnemyState.ATTACKING:
                 stateDisplay = "Attacking";
+                if (attackCooldownTimer > 0) attackCooldownTimer -= Time.deltaTime;
                 Attack();
                 if (Vector3.Distance(transform.position, playerPos.position) > attackDistance)
                 {
@@ -198,12 +202,16 @@ public class EnemyAI : MonoBehaviour
         agent.destination = playerPos.position;
         // transform.LookAt(playerPos.position, Vector3.up); TODO: make the AI face the player only in the XZ plane
         // checking if the time since the last attack is greater than the cooldown
+
+        if (attackCooldownTimer > 0) return;
+        
         if (Time.time > attackCooldown)
         {
             // Attack the player
             Debug.Log("Attacking player");
             // Reset the attack cooldown
             attackCooldown = Time.time + attackCooldown;
+            gameManager.PlayerHit();
         }
     }
 
