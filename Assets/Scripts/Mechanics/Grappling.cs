@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 // inspired by https://www.youtube.com/watch?v=TYzZsBl3OI0
 
@@ -18,6 +19,7 @@ public class Grappling : MonoBehaviour
     public Transform Mouth;
     public LayerMask whatIsGrappleable;
     public LineRenderer lr;
+    public Image crosshair;
 
     [Header("Grapple Settings")]
     public float maxGrappleDistance;
@@ -59,6 +61,12 @@ public class Grappling : MonoBehaviour
         {
             lr.SetPosition(0, Mouth.position);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        if (Physics.Raycast(Mouth.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable)) crosshair.enabled = true;
+        else crosshair.enabled = false;
     }
 
     /// <summary>

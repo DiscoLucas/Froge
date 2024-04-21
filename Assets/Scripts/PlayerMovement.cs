@@ -195,8 +195,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetVelocity()
     {
-        Debug.Log("Setting velocity");
         rb.velocity = velocityToSet;
-        //Debug.Log("Velocity set: " + cc.attachedRigidbody.velocity);
     }
 }
