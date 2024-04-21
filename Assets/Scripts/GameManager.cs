@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     Grappling grapplingComponent;
     TongueController tongueController;
+    PlayerMovement playerMovement;
 
     [Header("Enable Mechanics")]
     public bool enableGrapple;
@@ -35,6 +36,12 @@ public class GameManager : MonoBehaviour
 
         if (enableTongue) tongueController.enabled = true;
         else tongueController.enabled = false;
+
+        if (playerHealth <= 0)
+        {
+            // Game Over
+            Debug.Log("Game Over");
+        }
     }
     
 }
