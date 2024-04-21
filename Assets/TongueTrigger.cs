@@ -32,17 +32,4 @@ public class TongueTrigger : MonoBehaviour
 
         }
     }
-    /*private void OnCollisionEnter(Collision tongueCollider)
-    {
-        // get the name of the object that the tongue hit
-
-        if (!tongueCollider.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Tongue hit: " + tongueCollider.gameObject.name);
-            tongueController.isShooting = false;
-            tongueController.isRetracting = true; // hacky solution, but it works
-            //while (tongueController.isRetracting) StartCoroutine(tongueController.RetractTongue());
-
-        }
-    }*/
 }
