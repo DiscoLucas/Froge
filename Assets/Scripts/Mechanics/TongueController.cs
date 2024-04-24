@@ -20,12 +20,19 @@ public class TongueController : MonoBehaviour
     public float time;
     public float maxTime;
 
+    public Transform cameraOrientation;
+    public Transform playerModel;//dum måde at gøre dette på
+    public Transform startToungeTransform;
+    Vector3 aimRotation;//
+    public LineRenderer lineRenderer;
+
     private void Start()
     {
         // Save the original position of the tongue
         startPosition = tongue.transform.localPosition;
         tongueCollider = tongue.GetComponent<Collider>();
         tongueCollider.enabled = false; // Disable the collider until the tongue is extended
+        
     }
 
     private void Update()
@@ -33,6 +40,8 @@ public class TongueController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isShooting)
         {
             isShooting = true;
+            aimRotation = new Vector3(cameraOrientation.forward.x, cameraOrientation.forward.y, cameraOrientation.forward.z);
+            playerModel.forward = aimRotation;
         }
 
         if (isShooting) ExtendTongue();
@@ -42,6 +51,9 @@ public class TongueController : MonoBehaviour
         {
             StartCoroutine(RetractTongue());
         }
+
+        lineRenderer.SetPosition(0, startToungeTransform.position);
+        lineRenderer.SetPosition(1, tongue.transform.position);
     }
     private void ExtendTongue()
     {
@@ -49,7 +61,7 @@ public class TongueController : MonoBehaviour
         time += Time.deltaTime / maxTime;
         // Move tongue forward along local axis
         float curveValue = extendCurve.Evaluate(time);
-        tongue.transform.localPosition += (curveValue * speed) * Time.deltaTime * transform.forward;
+        tongue.transform.localPosition += (curveValue * speed) * Time.deltaTime * aimRotation;
 
 
         // Check if tongue has reached max distance
