@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
         
-        //MyInput();
+        
         SpeedControl();
 
         // handle drag
@@ -126,9 +126,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+<<<<<<< Updated upstream
         if (readyToJump && grounded)
         {
             readyToJump = false;
+=======
+        //AudioManager.instance.Play("");
+
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+>>>>>>> Stashed changes
 
             // reset y velocity
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

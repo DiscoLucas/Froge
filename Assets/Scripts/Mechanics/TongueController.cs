@@ -1,6 +1,7 @@
 // 4/20/2024 AI-Tag
 // This was created with assistance from Muse, a Unity Artificial Intelligence product
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class TongueController : MonoBehaviour
 
     public bool isRetracting = false;
     public bool isShooting = false;
+    bool readyToPunch = true;
+    public float punchCooldown;
 
     [SerializeField] AnimationCurve extendCurve;
     [SerializeField] AnimationCurve retractCurve;
@@ -37,9 +40,10 @@ public class TongueController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isShooting)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isShooting && readyToPunch)
         {
             isShooting = true;
+            readyToPunch = false;
             aimRotation = new Vector3(cameraOrientation.forward.x, cameraOrientation.forward.y, cameraOrientation.forward.z);
             playerModel.forward = aimRotation;
         }
@@ -86,9 +90,14 @@ public class TongueController : MonoBehaviour
         {
             isRetracting = false;
             tongueCollider.enabled = false; // Disable the collider when the tongue is retracted
+            Invoke(nameof(ResetPunch), punchCooldown);
             StopCoroutine(RetractTongue());
         }
         yield return null;
     }
 
+    private void ResetPunch()
+    {
+        readyToPunch = true;
+    }
 }
