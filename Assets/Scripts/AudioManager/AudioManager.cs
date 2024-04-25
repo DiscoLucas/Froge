@@ -1,6 +1,7 @@
 using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using Unity.Collections;
 
 public class AudioManager : MonoBehaviour
 {
@@ -199,5 +200,11 @@ public class AudioManager : MonoBehaviour
         }
         Debug.LogError("Clip not found");
         return null;
+    }
+
+    public string randomClipFromSArray(string[] sounds)
+    {
+        string oneSoundClip = sounds[UnityEngine.Random.Range(0, sounds.Length)];
+        return oneSoundClip;
     }
 }

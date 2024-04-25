@@ -45,6 +45,10 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    [Header("Sounds")]
+    [SerializeField] string[] soundArray;
+
+
     private void Start()
     {
         animator = GetComponent<Animator>();
