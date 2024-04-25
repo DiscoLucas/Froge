@@ -2,6 +2,7 @@ using JohnStairs.RCC.Inputs;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static TheraBytes.BetterUi.LocationAnimations;
 //Sauce https://youtu.be/f473C43s8nE?si=3GUVweo51ebm9OZ9
 public class PlayerMovement : MonoBehaviour
 {/*
@@ -44,6 +45,12 @@ public class PlayerMovement : MonoBehaviour
         
     }*/
 
+    [Header("Animation")]
+    public Animator animator;
+    int isWalkingHash;
+    int isRunningHash;
+
+
     [Header("Movement")]
     public float moveSpeed;
 
@@ -77,6 +84,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
+
+        isWalkingHash = Animator.StringToHash("isWalking");
+        isRunningHash = Animator.StringToHash("isRussing");
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -104,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        handleAnimation();
     }
 
     private void MyInput()
@@ -126,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
+
         // on ground
         if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
@@ -196,5 +209,32 @@ public class PlayerMovement : MonoBehaviour
     private void SetVelocity()
     {
         rb.velocity = velocityToSet;
+    }
+
+    void handleAnimation()
+    {
+    bool isRunning = animator.GetBool(isRunningHash);
+    bool isWalking = animator.GetBool(isWalkingHash);
+       
+        //if ()
+        //{
+            //animator.SetBool("isWalking", true);
+        //}
+
+        //else
+        //{
+            //animator.SetBool("isWalking", false);
+        //}
+        //bool isWalking = animator.GetBool("isWalking");
+        //bool isRunning = animator.GetBool("isRunning");
+
+        //if (isMovementPressed && !isWalking) 
+        //{
+            //animator.SetBool("isWalking", true);
+        //}
+        //else if (!isMovementPressed && isWalking)
+        //{
+            //animator.SetBool("iswalking", false);
+        //}
     }
 }
