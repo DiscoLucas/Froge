@@ -11,7 +11,17 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     int isWalkingHash;
     int isRunningHash;
+    float aniVelocity;
+    int velocityHash;
 
+    float movementSpeed;
+    float localMovementX;
+    float localMovementZ;
+
+    int movementHash;
+    int localMovementXHash;
+    int localMovementZHash;
+    int turnDirectionHash;
 
     [Header("Movement")]
     InputAction movement;
@@ -59,6 +69,12 @@ public class PlayerMovement : MonoBehaviour
 
         controls.CharacterControls.Jump.performed += ctx => Jump();
         movement = controls.CharacterControls.Move;
+
+        velocityHash = Animator.StringToHash("Velocity");
+        movementHash = Animator.StringToHash("Movement Speed");
+        localMovementXHash = Animator.StringToHash("Local Movement X");
+        localMovementZHash = Animator.StringToHash("Local Movement Z");
+        turnDirectionHash = Animator.StringToHash("Turning Direction");
     }
     private void OnEnable()
     {
@@ -89,23 +105,32 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        aniVelocity = new Vector2(rb.velocity.x, rb.velocity.z).magnitude;
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
-        handleAnimation();
+        movementSpeed = rb.velocity.magnitude;
+        animator.SetFloat(movementHash, movementSpeed);
+        //handleAnimation();
     }
-
-
-    private void MovePlayer()
+    
+            private void MovePlayer()
     {
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        
 
         // on ground
         if (grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            animator.SetFloat(velocityHash, aniVelocity);
+        }
+            
+
 
         // in air
         else if (!grounded)
