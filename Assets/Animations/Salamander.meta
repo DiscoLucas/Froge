@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 6d1f24940c37ec5479b7dfc0444d86aa
+<<<<<<<< Updated upstream:Assets/Animations/Salamander.meta
+guid: 3f29a1ec0ec57eb4384d1f0983d28cfe
+========
+guid: 4608728c73985d546a922be4a0b82d74
+>>>>>>>> Stashed changes:Assets/Scripts/AudioManager/AudioClips.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
