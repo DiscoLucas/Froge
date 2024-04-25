@@ -5,46 +5,8 @@ using UnityEngine.InputSystem;
 using static TheraBytes.BetterUi.LocationAnimations;
 //Sauce https://youtu.be/f473C43s8nE?si=3GUVweo51ebm9OZ9
 public class PlayerMovement : MonoBehaviour
-{/*
-    [Header("References")]
-    Rigidbody rb;
-    RPGInputActions inputActions;
-    InputAction moveAction;
-    InputAction lookAction;
-    public Transform orientation;  
 
-    [Header("Movement Attributes")]
-    public float moveSpeed = 5f;
-    Vector2 moveInput;
-    Vector3 moveDirection;
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        inputActions = RPGInputManager.GetInputActions();
-        moveAction = inputActions.Character.Movement;
-        lookAction = inputActions.Character.Look;
-    }
-
-    private void Update()
-    {
-        
-        
-    }
-
-    private void FixedUpdate()
-    {
-        moveInput = moveAction.ReadValue<Vector2>();
-        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
-        rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Force);
-    }
-
-    private void MovePlayer()
-    {
-        
-    }*/
-
+{ 
     [Header("Animation")]
     public Animator animator;
     int isWalkingHash;
@@ -52,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Movement")]
+    InputAction movement;
     public float moveSpeed;
 
     public float groundDrag;
@@ -87,12 +50,24 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
 
         isWalkingHash = Animator.StringToHash("isWalking");
-        isRunningHash = Animator.StringToHash("isRussing");
+        isRunningHash = Animator.StringToHash("isRunning");
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
         readyToJump = true;
+
+        controls.CharacterControls.Jump.performed += ctx => Jump();
+        movement = controls.CharacterControls.Move;
+    }
+    private void OnEnable()
+    {
+        controls = new Inputs();
+        controls.Enable();
+    }
+    private void OnDisable()
+    {
+        controls.Disable();
     }
 
     private void Update()
@@ -100,10 +75,13 @@ public class PlayerMovement : MonoBehaviour
         if (freezeMovement)
             return;
 
+        horizontalInput = movement.ReadValue<Vector2>().x;
+        verticalInput = movement.ReadValue<Vector2>().y;
+
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
         
-        MyInput();
+        //MyInput();
         SpeedControl();
 
         // handle drag
@@ -119,21 +97,6 @@ public class PlayerMovement : MonoBehaviour
         handleAnimation();
     }
 
-    private void MyInput()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
-        {
-            readyToJump = false;
-
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-    }
 
     private void MovePlayer()
     {
@@ -163,10 +126,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        if (readyToJump && grounded)
+        {
+            readyToJump = false;
 
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            // reset y velocity
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        
     }
     private void ResetJump()
     {
@@ -204,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool activateGrapple;
     private Vector3 velocityToSet;
-
+    private Inputs controls;
 
     private void SetVelocity()
     {
@@ -216,25 +186,14 @@ public class PlayerMovement : MonoBehaviour
     bool isRunning = animator.GetBool(isRunningHash);
     bool isWalking = animator.GetBool(isWalkingHash);
        
-        //if ()
-        //{
-            //animator.SetBool("isWalking", true);
-        //}
-
-        //else
-        //{
-            //animator.SetBool("isWalking", false);
-        //}
-        //bool isWalking = animator.GetBool("isWalking");
-        //bool isRunning = animator.GetBool("isRunning");
-
-        //if (isMovementPressed && !isWalking) 
-        //{
-            //animator.SetBool("isWalking", true);
-        //}
-        //else if (!isMovementPressed && isWalking)
-        //{
-            //animator.SetBool("iswalking", false);
-        //}
+        float movingMagnitude = movement.ReadValue<Vector2>().magnitude;
+        if (movingMagnitude != 0 && !isWalking) 
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else if (movingMagnitude != 0 && isWalking)
+        {
+            animator.SetBool("isWalking", false);
+        }
     }
 }
