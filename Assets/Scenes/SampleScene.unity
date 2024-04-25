@@ -24006,7 +24006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableGrapple: 0
-  enableTongue: 0
+  enableTongue: 1
   pauseMenuUI: {fileID: 824173913}
   hearts:
   - {fileID: 26691788}
@@ -25405,6 +25405,7 @@ MonoBehaviour:
   speed: 30
   isRetracting: 0
   isShooting: 0
+  punchCooldown: 0.46
   extendCurve:
     serializedVersion: 2
     m_Curve:
