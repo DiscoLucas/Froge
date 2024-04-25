@@ -55,6 +55,10 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    [Header("Sounds")]
+    [SerializeField] string[] soundArray;
+
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -151,9 +155,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+<<<<<<< Updated upstream
         if (readyToJump && grounded)
         {
             readyToJump = false;
+=======
+        //AudioManager.instance.Play("");
+
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+>>>>>>> Stashed changes
 
             // reset y velocity
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
