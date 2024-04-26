@@ -54,6 +54,7 @@ public class ToungeAttack : MonoBehaviour
     private void RetractTongue()
     {
         spring.spring = retractionSpringForce;
+        AudioManager.instance.Play("Tongue Retract");
     }
 
     private void OnTriggerEnter(Collider mouth)
