@@ -17,11 +17,13 @@ public class PlayerMovement : MonoBehaviour
     float movementSpeed;
     float localMovementX;
     float localMovementZ;
+    float yVelocity;
 
     int movementHash;
     int localMovementXHash;
     int localMovementZHash;
     int turnDirectionHash;
+    int yVelocityHash;
 
     [Header("Movement")]
     InputAction movement;
@@ -79,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
         localMovementXHash = Animator.StringToHash("Local Movement X");
         localMovementZHash = Animator.StringToHash("Local Movement Z");
         turnDirectionHash = Animator.StringToHash("Turning Direction");
+        yVelocityHash = Animator.StringToHash("yVelocity");
     }
     private void OnEnable()
     {
@@ -131,14 +134,18 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-            animator.SetFloat(velocityHash, aniVelocity);
+            animator.SetFloat(velocityHash, aniVelocity, 0.1f, Time.deltaTime);
         }
             
 
 
         // in air
         else if (!grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            animator.SetFloat(yVelocityHash, rb.velocity.y);
+        }
+            
     }
 
     private void SpeedControl()
@@ -155,16 +162,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-<<<<<<< Updated upstream
         if (readyToJump && grounded)
         {
             readyToJump = false;
-=======
+        
         //AudioManager.instance.Play("");
 
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
->>>>>>> Stashed changes
+
 
             // reset y velocity
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
