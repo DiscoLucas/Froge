@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
         {
             readyToJump = false;
 =======
-        //AudioManager.instance.Play("");
+        AudioManager.instance.Play("Jump_Sound");
 
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
