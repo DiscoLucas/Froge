@@ -11,6 +11,8 @@ using UnityEngine.UI;
 
 public class Grappling : MonoBehaviour
 {
+    AudioManager audioManager;
+
     [Header("References")]
     PlayerMovement pm;
     RPGInputActions inputActions;
@@ -37,6 +39,7 @@ public class Grappling : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         pm = GetComponent<PlayerMovement>();
         //pm = GetComponent<RPGController>();
         //inputActions = RPGInputManager.GetInputActions();
@@ -78,6 +81,7 @@ public class Grappling : MonoBehaviour
         if (grapplingCooldownTimer > 0) return;
 
         grappling = true;
+      
 
         pm.freezeMovement = true;
         if (Physics.Raycast(Mouth.position, cam.forward, out RaycastHit hit, maxGrappleDistance, whatIsGrappleable))
@@ -97,6 +101,8 @@ public class Grappling : MonoBehaviour
 
     void ExecuteGrapple()
     {
+        audioManager.Play("Grapple");
+
         pm.freezeMovement = false;
 
         Vector3 lowestPoint = new(transform.position.x, transform.position.y -1f, transform.position.z);

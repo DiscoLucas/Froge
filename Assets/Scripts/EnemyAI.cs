@@ -1,9 +1,10 @@
-using System;
+    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent agent;
     public Transform[] waypoints;
     int destPoint = 0;
-    
+    AudioManager audioManager;
+
+    public float minWaitTime = 2f; //Min wait time between audio plays.
+    public float maxWaitTime = 5f; //Max wait time between audio plays.
+
     [Header("Physical Attributes")]
     public float runSpeed = 10f;
     public float walkSpeed = 5f;
@@ -50,6 +55,8 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
+        StartCoroutine(PlayAudioRandomly());
         gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -109,6 +116,15 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    IEnumerator PlayAudioRandomly() 
+    { 
+        while(true)
+        {
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+            audioManager.Play("Enemy_sound");
+        }
+    }
+
     bool CanSeePlayer()
     {
         Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
@@ -160,6 +176,7 @@ public class EnemyAI : MonoBehaviour
         if (CanSeePlayer())
         {
             agent.destination = playerPos.position;
+            AudioManager.instance.Play("Enemy_sound");
             isLooking = false;
         }
         else if (!isLooking)
@@ -211,6 +228,7 @@ public class EnemyAI : MonoBehaviour
             Debug.Log("Attacking player");
             // Reset the attack cooldown
             attackCooldown = Time.time + attackCooldown;
+            AudioManager.instance.Play("Bonk");
             gameManager.PlayerHit();
         }
     }

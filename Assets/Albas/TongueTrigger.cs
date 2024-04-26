@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class TongueTrigger : MonoBehaviour
 {
+    AudioManager audioManager;
+
     [SerializeField] private Collider tongueCollider;
     TongueController tongueController;
     [SerializeField] private Rigidbody parentRB;
     private void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         tongueCollider = GetComponent<Collider>();
         tongueController = GetComponentInParent<TongueController>();
         parentRB = GetComponentInParent<Rigidbody>();
@@ -26,9 +29,15 @@ public class TongueTrigger : MonoBehaviour
             {
                 tongueCollider.gameObject.GetComponent<Die>().enabled = true;
             }
+            else
+            {
+                audioManager.Play("Enemy_miss");
+            }
             tongueController.isShooting = false;
             tongueController.isRetracting = true; // hacky solution, but it works
-            //while (tongueController.isRetracting) StartCoroutine(tongueController.RetractTongue());
+           
+            
+           
 
         }
     }

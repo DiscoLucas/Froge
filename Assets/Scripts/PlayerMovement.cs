@@ -7,6 +7,8 @@ using static TheraBytes.BetterUi.LocationAnimations;
 public class PlayerMovement : MonoBehaviour
 
 { 
+    AudioManager audioManager;
+
     [Header("Animation")]
     public Animator animator;
     int isWalkingHash;
@@ -61,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         animator = GetComponent<Animator>();
 
         isWalkingHash = Animator.StringToHash("isWalking");
@@ -155,10 +158,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+
         if (readyToJump && grounded)
         {
             readyToJump = false;
-        //AudioManager.instance.Play("");
+
+        audioManager.Play("Jump_Sound");
 
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
