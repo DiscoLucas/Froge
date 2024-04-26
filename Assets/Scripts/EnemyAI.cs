@@ -13,6 +13,7 @@ public class EnemyAI : MonoBehaviour
     AudioManager audioManager;
     public Transform[] waypoints;
     int destPoint = 0;
+    AudioManager audioManager;
 
     public float minWaitTime = 2f; //Min wait time between audio plays.
     public float maxWaitTime = 5f; //Max wait time between audio plays.

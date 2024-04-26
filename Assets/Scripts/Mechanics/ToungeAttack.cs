@@ -7,6 +7,8 @@ using System;
 
 public class ToungeAttack : MonoBehaviour
 {
+    AudioManager audioManager;
+
     [Header("References")]
     private RPGInputActions inputActions;
     InputAction punchAction;
@@ -23,6 +25,7 @@ public class ToungeAttack : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         inputActions = RPGInputManager.GetInputActions();
         punchAction = inputActions.Character.Punch;
         punchAction.performed += ctx => OnPunch();
@@ -54,6 +57,7 @@ public class ToungeAttack : MonoBehaviour
     private void RetractTongue()
     {
         spring.spring = retractionSpringForce;
+        audioManager.Play("Tongue Retract");
     }
 
     private void OnTriggerEnter(Collider mouth)

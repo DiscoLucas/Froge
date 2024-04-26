@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class TongueController : MonoBehaviour
 {
+    AudioManager audioManager;
     public GameObject tongue; // Reference to the tongue GameObject
     public Collider tongueCollider; // Reference to the tongue collider
     public float maxDistance = 10f; // Maximum distance that the tongue can reach
@@ -31,6 +32,7 @@ public class TongueController : MonoBehaviour
 
     private void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         // Save the original position of the tongue
         startPosition = tongue.transform.localPosition;
         tongueCollider = tongue.GetComponent<Collider>();
@@ -61,6 +63,7 @@ public class TongueController : MonoBehaviour
     }
     private void ExtendTongue()
     {
+        audioManager.Play("Extending_Tongue");
         tongueCollider.enabled = true; // Enable the collider when the tongue is extended
         time += Time.deltaTime / maxTime;
         // Move tongue forward along local axis
