@@ -10,11 +10,13 @@ public class EnemyAI : MonoBehaviour
 {
     GameManager gameManager;
     NavMeshAgent agent;
+    AudioManager audioManager;
     public Transform[] waypoints;
     int destPoint = 0;
 
     public float minWaitTime = 2f; //Min wait time between audio plays.
     public float maxWaitTime = 5f; //Max wait time between audio plays.
+    public bool audioHasRun = false;
 
     [Header("Physical Attributes")]
     public float runSpeed = 10f;
@@ -54,9 +56,10 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(PlayAudioRandomly());
+        
         gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
+        audioManager = FindObjectOfType<AudioManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
@@ -116,14 +119,16 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator PlayAudioRandomly() 
     { 
-        while(true)
+        if (!audioHasRun)
         {
+            audioHasRun = true;
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
-            AudioManager.instance.Play("Enemy_sound");
+            audioManager.Play("Enemy_sound");
+            audioHasRun = false;
         }
     }
 
-    bool CanSeePlayer()
+    public bool CanSeePlayer()
     {
         Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
         float angle = Vector3.Angle(transform.forward, targetDirection);
@@ -168,6 +173,7 @@ public class EnemyAI : MonoBehaviour
         // Draw yellow ray above the agent
         Debug.DrawRay(transform.position, Vector3.up, Color.yellow);
         agent.speed = runSpeed;
+        //StartCoroutine(PlayAudioRandomly());
         // transform.LookAt(playerPos.position, Vector3.up); TODO: make the AI face the player only in the XZ plane
 
         // Look for the player
