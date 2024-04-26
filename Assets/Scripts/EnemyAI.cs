@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent agent;
     public Transform[] waypoints;
     int destPoint = 0;
+    AudioManager audioManager;
 
     public float minWaitTime = 2f; //Min wait time between audio plays.
     public float maxWaitTime = 5f; //Max wait time between audio plays.
@@ -54,6 +55,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         StartCoroutine(PlayAudioRandomly());
         gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
@@ -119,7 +121,7 @@ public class EnemyAI : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
-            AudioManager.instance.Play("Enemy_sound");
+            audioManager.Play("Enemy_sound");
         }
     }
 
