@@ -29,12 +29,15 @@ public class TongueTrigger : MonoBehaviour
             {
                 tongueCollider.gameObject.GetComponent<Die>().enabled = true;
             }
-            tongueController.isShooting = false;
-            tongueController.isRetracting = true; // hacky solution, but it works
-            else 
+            else
             {
                 audioManager.Play("Enemy_miss");
             }
+            tongueController.isShooting = false;
+            tongueController.isRetracting = true; // hacky solution, but it works
+           
+            
+           
 
         }
     }
