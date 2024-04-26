@@ -17,7 +17,13 @@ public class Die : MonoBehaviour
         AI.enabled = false;
         audioManager.Play("Enemy_Death Sound");
         Debug.Log("damn, i fucking died");
+        Invoke(nameof(Despawn), 2f);
         //TODO: implement death animation
+    }
+
+    void Despawn()
+    {
+        Destroy(gameObject);
     }
     
 }
