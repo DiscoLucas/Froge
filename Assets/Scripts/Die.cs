@@ -13,6 +13,7 @@ public class Die : MonoBehaviour
     {
         AI = GetComponent<EnemyAI>();
         AI.enabled = false;
+        AudioManager.instance.Play("Enemy_Death Sound");
         Debug.Log("damn, i fucking died");
         //TODO: implement death animation
     }
