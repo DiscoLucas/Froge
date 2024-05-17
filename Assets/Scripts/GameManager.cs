@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
 
         // Reset player health
         playerHealth = 3;
+        enableGrapple = false;
+        enableTongue = false;
     }
 
     // Update is called once per frame
