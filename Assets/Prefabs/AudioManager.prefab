@@ -44,6 +44,149 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fcadb6fd60eb124781a8d6c2ae70456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundsArray: []
+  soundsArray:
+  - name: Walk-01
+    clip: {fileID: 8300000, guid: 1bdb2365f401d8b47b570ea128f45ad8, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-02
+    clip: {fileID: 8300000, guid: 62246b47acd31f64aa336985494a6376, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-03
+    clip: {fileID: 8300000, guid: af19f1d8bef88ea429ff16fb6957c636, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-04
+    clip: {fileID: 8300000, guid: f565e6b6e3f80a14d96684dca5d46a64, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-05
+    clip: {fileID: 8300000, guid: 962d22f2e82181d4180b4cd6d06081b2, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-06
+    clip: {fileID: 8300000, guid: 014e3832a2b53134faef730f9e4255e4, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-07
+    clip: {fileID: 8300000, guid: e1297dfb1349c04499c23ab04f8faacb, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-08
+    clip: {fileID: 8300000, guid: 8ada940c569022647812bdfb5a8595f9, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-09
+    clip: {fileID: 8300000, guid: c404af9a30460204b84d658598b219c5, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-10
+    clip: {fileID: 8300000, guid: 2e635dd859cb4cb4f9f9a71b2970c49c, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-11
+    clip: {fileID: 8300000, guid: 25571bac7ad244e44945ae72be095b01, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-12
+    clip: {fileID: 8300000, guid: 216a3ad6706cdde4aa5512c3b2ba2951, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
+  - name: Walk-13
+    clip: {fileID: 8300000, guid: 1be6a7c1c7614e744a19e2f106218813, type: 3}
+    volume: 0
+    pitch: 1
+    spatialBlend: 0
+    spatialize: 0
+    loop: 0
+    doblerEffect: 0
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    mixer: {fileID: 0}
   voiceArray: []
   musicArray: []
