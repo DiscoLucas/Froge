@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         movementSpeed = rb.velocity.magnitude;
-        animator.SetFloat(movementHash, movementSpeed);
+        //animator.SetFloat(movementHash, movementSpeed);
         //handleAnimation();
     }
     

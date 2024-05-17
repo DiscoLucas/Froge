@@ -11,7 +11,7 @@ public class EnemyAI : MonoBehaviour
     GameManager gameManager;
     NavMeshAgent agent;
     AudioManager audioManager;
-    public Transform[] waypoints;
+    public Transform[] waypointsArray;
     private Animator animator;
     int destPoint = 0;
 
@@ -41,6 +41,7 @@ public class EnemyAI : MonoBehaviour
     public bool isLooking;
     [Tooltip("While alerted, the enemy will always be able to see the player within this range.")]
     public float situationalAwareness = 3f;
+    public bool isPlayerInFOV;
 
     Transform playerPos;
     GameObject player;
@@ -84,6 +85,7 @@ public class EnemyAI : MonoBehaviour
                 WalkAnim();
                 if (CanSeePlayer())
                 {
+                    Debug.Break();
                     currentState = EnemyState.ALERT;
                     alertTimeElapsed = 0f; // Reset alert timer after spotting the player again
                 }
@@ -132,6 +134,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    
     public bool CanSeePlayer()
     {
         Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
@@ -142,34 +145,36 @@ public class EnemyAI : MonoBehaviour
         {
             //Debug.Log("Player is in field of view");
             RaycastHit hit;
+            isPlayerInFOV = true;
 
             if (Physics.Raycast(transform.position, targetDirection, out hit, viewDistance))
             {
                 Debug.DrawRay(transform.position, targetDirection, Color.red);
-                //Debug.Log("Hit: " + hit.collider.name);
+                Debug.Log("Hit: " + hit.collider.name);
                 if (hit.collider.CompareTag("Player"))
                 {
                     return true;
                 }
             }
         }
+        isPlayerInFOV = false;
         return false;
     }
     void Patrol()
     {
         agent.speed = walkSpeed;
-        // Chek if any waypoints have been set up
-        if (waypoints.Length == 0)
+        // Chek if any waypointsArray have been set up
+        if (waypointsArray.Length == 0)
         {
             Debug.LogWarning("No waypoints set up for enemy");
             return;
         }
-        agent.destination = waypoints[destPoint].position;
+        agent.destination = waypointsArray[destPoint].position;
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
             //TODO: start coroutine to wait for a random amount of time or edit LookAround to work with the patrol state
             // Choose the next destination point when the agent gets to one
-            destPoint = (destPoint + 1) % waypoints.Length;
+            destPoint = (destPoint + 1) % waypointsArray.Length;
         }
     }
     void Chase()
