@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent agent;
     AudioManager audioManager;
     public Transform[] waypoints;
+    private Animator animator;
     int destPoint = 0;
 
     public float minWaitTime = 2f; //Min wait time between audio plays.
@@ -56,7 +57,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
         audioManager = FindObjectOfType<AudioManager>();
@@ -80,6 +81,7 @@ public class EnemyAI : MonoBehaviour
                 stateDisplay = "Patrolling";
                 currentFOV = fov;
                 Patrol();
+                WalkAnim();
                 if (CanSeePlayer())
                 {
                     currentState = EnemyState.ALERT;
@@ -90,6 +92,7 @@ public class EnemyAI : MonoBehaviour
                 stateDisplay = "Alert";
                 currentFOV = fov * alertFOVModifier;
                 Chase();
+                RunAnim();
                 // if the player is no longer in sight, start the alert timer
                 if (!CanSeePlayer())
                 {
@@ -109,6 +112,7 @@ public class EnemyAI : MonoBehaviour
                 stateDisplay = "Attacking";
                 if (attackCooldownTimer > 0) attackCooldownTimer -= Time.deltaTime;
                 Attack();
+                ChompAnim();
                 if (Vector3.Distance(transform.position, playerPos.position) > attackDistance)
                 {
                     currentState = EnemyState.ALERT;
@@ -194,6 +198,7 @@ public class EnemyAI : MonoBehaviour
     {
         stateDisplay = currentState + " - Looking around";
         agent.isStopped = true;
+        IdleAnim();
         float lookTimer = 0f;
         float lookAngle = 0f; 
         float lookRange = 60f;
@@ -237,7 +242,35 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    
+    //For the animations
+    void IdleAnim()
+    {
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isChomp", false);
+    }
+
+    void WalkAnim()
+    {
+        animator.SetBool("isWalking", true);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isChomp", false);
+    }
+
+    void RunAnim()
+    {
+        animator.SetBool("isWalking", true);
+        animator.SetBool("isRunning", true);
+        animator.SetBool("isChomp", false);
+    }
+
+    void ChompAnim()
+    {
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isChomp", true);
+    }
+
     /*
     /// <summary>
     /// runs a function after a random amount of time
