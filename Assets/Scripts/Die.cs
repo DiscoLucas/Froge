@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -8,20 +9,34 @@ public class Die : MonoBehaviour
 {
     private EnemyAI AI;
     AudioManager audioManager;
+    Transform body;
 
     // Start is called before the first frame update
     void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
         AI = GetComponent<EnemyAI>();
+        body = gameObject.transform.Find("Salamander");
+
+        if (body != null) body.gameObject.SetActive(false); // Disable the body of the dead enemy
+        else throw new Exception ("Salamander body not found");
+
         AI.enabled = false;
         audioManager.Play("Enemy_Death Sound");
-        Debug.Log("damn, i fucking died");
-        Invoke(nameof(Despawn), 0.2f);
-        //TODO: implement death animation
-    }
 
-    void Despawn()
+        
+
+        // Play child particle system once
+        ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem particle in particles)
+        {
+            particle.Play();
+        }
+
+    }
+    
+
+    public void Despawn()
     {
         Destroy(gameObject);
     }

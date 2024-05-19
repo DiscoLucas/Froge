@@ -16354,26 +16354,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1605425698336632222, guid: 4e52a77591066164e8cb8415a5c9175a,
         type: 3}
-      propertyPath: runSpeed
-      value: 4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1605425698336632222, guid: 4e52a77591066164e8cb8415a5c9175a,
-        type: 3}
-      propertyPath: walkSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1605425698336632222, guid: 4e52a77591066164e8cb8415a5c9175a,
-        type: 3}
-      propertyPath: viewDistance
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1605425698336632222, guid: 4e52a77591066164e8cb8415a5c9175a,
-        type: 3}
-      propertyPath: situationalAwareness
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1605425698336632222, guid: 4e52a77591066164e8cb8415a5c9175a,
-        type: 3}
       propertyPath: waypoints.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -16434,9 +16414,14 @@ PrefabInstance:
       objectReference: {fileID: 1263022248}
     - target: {fileID: 3173102359185226018, guid: 4e52a77591066164e8cb8415a5c9175a,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3173102359185226018, guid: 4e52a77591066164e8cb8415a5c9175a,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4e41b7607c873a14bb34e5b2f8d54c7e, type: 2}
+      objectReference: {fileID: 2100000, guid: 5545993361f7ef8479dce19256c84f06, type: 2}
     - target: {fileID: 3661709603397131967, guid: 4e52a77591066164e8cb8415a5c9175a,
         type: 3}
       propertyPath: m_Name
@@ -16450,7 +16435,7 @@ PrefabInstance:
     - target: {fileID: 5145836363009373505, guid: 4e52a77591066164e8cb8415a5c9175a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.17
+      value: 17.587738
       objectReference: {fileID: 0}
     - target: {fileID: 5145836363009373505, guid: 4e52a77591066164e8cb8415a5c9175a,
         type: 3}
@@ -31180,7 +31165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableGrapple: 0
-  enableTongue: 0
+  enableTongue: 1
   pauseMenuUI: {fileID: 824173913}
   hearts:
   - {fileID: 26691788}

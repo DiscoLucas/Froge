@@ -226,7 +226,7 @@ public class EnemyAI : MonoBehaviour
             if (Time.time > nextCheckTime)
             {
                 bool canSee = CanSeePlayer();
-                Debug.Log("Looking around. Can see player: " + canSee);
+                //Debug.Log("Looking around. Can see player: " + canSee);
                 if (canSee) break;
                 nextCheckTime = Time.time + checkInterval;
             }

@@ -50,9 +50,14 @@ public class GameManager : MonoBehaviour
 
         // Reset player health
         playerHealth = 3;
+    }
+    #if !UNITY_EDITOR
+    void Awake()
+    {
         enableGrapple = false;
         enableTongue = false;
     }
+#endif
 
     // Update is called once per frame
     void FixedUpdate()
