@@ -41,7 +41,6 @@ public class EnemyAI : MonoBehaviour
     public bool isLooking;
     [Tooltip("While alerted, the enemy will always be able to see the player within this range.")]
     public float situationalAwareness = 3f;
-    public bool isPlayerInFOV;
 
     Transform playerPos;
     GameObject player;
@@ -85,7 +84,6 @@ public class EnemyAI : MonoBehaviour
                 WalkAnim();
                 if (CanSeePlayer())
                 {
-                    Debug.Break();
                     currentState = EnemyState.ALERT;
                     alertTimeElapsed = 0f; // Reset alert timer after spotting the player again
                 }
@@ -94,7 +92,6 @@ public class EnemyAI : MonoBehaviour
                 stateDisplay = "Alert";
                 currentFOV = fov * alertFOVModifier;
                 Chase();
-                RunAnim();
                 // if the player is no longer in sight, start the alert timer
                 if (!CanSeePlayer())
                 {
@@ -137,27 +134,30 @@ public class EnemyAI : MonoBehaviour
     
     public bool CanSeePlayer()
     {
-        Vector3 targetDirection = playerPos.position + Vector3.up - transform.position;
+        if (playerPos == null) return false; // Ensure playerPos is not null
+
+        Vector3 targetDirection = (playerPos.position + Vector3.up - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, targetDirection);
 
-        if (angle < currentFOV * 0.5f ||
-            isAlerted && Vector3.Distance(transform.position, playerPos.position) < situationalAwareness)
+        if (angle < currentFOV * 0.5f)
         {
-            //Debug.Log("Player is in field of view");
             RaycastHit hit;
-            isPlayerInFOV = true;
-
             if (Physics.Raycast(transform.position, targetDirection, out hit, viewDistance))
             {
-                Debug.DrawRay(transform.position, targetDirection, Color.red);
-                Debug.Log("Hit: " + hit.collider.name);
+                Debug.DrawRay(transform.position, targetDirection * viewDistance, Color.red);
+                //Debug.Log("Hit: " + hit.collider.name);
                 if (hit.collider.CompareTag("Player"))
                 {
                     return true;
                 }
             }
         }
-        isPlayerInFOV = false;
+        // If not in patrol state, the enemy can always see the player within a certain range
+        else if (currentState != EnemyState.PATROLLING &&
+            Vector3.Distance(transform.position, playerPos.position) < situationalAwareness)
+        {
+            return true;
+        }
         return false;
     }
     void Patrol()
@@ -169,6 +169,7 @@ public class EnemyAI : MonoBehaviour
             Debug.LogWarning("No waypoints set up for enemy");
             return;
         }
+        
         agent.destination = waypointsArray[destPoint].position;
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
@@ -188,7 +189,9 @@ public class EnemyAI : MonoBehaviour
         // Look for the player
         if (CanSeePlayer())
         {
+            StopCoroutine(LookAround());
             agent.destination = playerPos.position;
+            RunAnim();
             AudioManager.instance.Play("Enemy_sound");
             isLooking = false;
         }
@@ -202,17 +205,33 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator LookAround() // TODO: fix AI gettig stuck in this coroutine
     {
         stateDisplay = currentState + " - Looking around";
+        //Debug.Log("Looking around");
         agent.isStopped = true;
         IdleAnim();
+
         float lookTimer = 0f;
-        float lookAngle = 0f; 
         float lookRange = 60f;
+        Quaternion initialRotation = transform.rotation;
+
+        float checkInterval = 0.1f; // How often to check if the player is visible
+        float nextCheckTime = 0f;
 
         while (!CanSeePlayer())
         {
             lookTimer += Time.deltaTime;
-            lookAngle = Mathf.Sin(lookTimer * lookSpeed / Mathf.PI) * lookRange;
-            transform.RotateAround(transform.position, Vector3.up, lookAngle * Time.deltaTime);
+            float lookAngle = Mathf.Sin(lookTimer * lookSpeed / Mathf.PI) * lookRange;
+            transform.rotation = initialRotation * Quaternion.Euler(0, lookAngle, 0);
+
+            
+            if (Time.time > nextCheckTime)
+            {
+                bool canSee = CanSeePlayer();
+                Debug.Log("Looking around. Can see player: " + canSee);
+                if (canSee) break;
+                nextCheckTime = Time.time + checkInterval;
+            }
+
+
             if (lookTimer > alertTime)
             {
                 yield return null;
@@ -275,7 +294,6 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("isRunning", false);
         animator.SetBool("isChomp", true);
     }
-
     /*
     /// <summary>
     /// runs a function after a random amount of time
