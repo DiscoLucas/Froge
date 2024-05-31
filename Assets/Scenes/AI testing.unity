@@ -16477,11 +16477,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5820331442211943112, guid: 4e52a77591066164e8cb8415a5c9175a,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39789,11 +39784,6 @@ PrefabInstance:
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 1179167539}
-    - target: {fileID: 7669101323530223802, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
-        type: 3}
-      propertyPath: maxGrappleDistance
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7757125696943549207, guid: ac58e4c435db5be4b95d74bc9eeb3ef2,
         type: 3}
       propertyPath: animator

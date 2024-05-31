@@ -91,6 +91,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   grounded: 0
   orientation: {fileID: 3066570532162909926}
+  soundArray: []
 --- !u!114 &7669101323530223802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +111,7 @@ MonoBehaviour:
     m_Bits: 512
   lr: {fileID: 3210382211228683965}
   crosshair: {fileID: 0}
-  maxGrappleDistance: 6
+  maxGrappleDistance: 10
   grappleDelay: 0.5
   overShootYAxis: 1
   grappleKey: 102
