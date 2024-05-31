@@ -12,7 +12,7 @@
     "_tempCollidersAction": 1,
     "_paletteManager": {
         "_selectedPaletteIdx": 0,
-        "_selectedBrushIdx": -1,
+        "_selectedBrushIdx": 0,
         "_showBrushName": false,
         "_viewList": false,
         "_showTabsInMultipleRows": false,
@@ -475,7 +475,7 @@
         ],
         "_selectedProfileName": "Default",
         "_unsavedProfile": {
-            "_radius": 1.0,
+            "_radius": 3.0,
             "_paintTool": {
                 "_parentGlobalId": "",
                 "_autoCreateParent": true,
@@ -595,8 +595,8 @@
                     }
                 }
             },
-            "_brushShape": 1,
-            "_density": 50,
+            "_brushShape": 2,
+            "_density": 42,
             "_orientAlongBrushstroke": false,
             "_additionalOrientationAngle": {
                 "x": 0.0,
@@ -604,7 +604,7 @@
                 "z": 0.0
             },
             "_spacingType": 0,
-            "_minSpacing": 1.0,
+            "_minSpacing": 4.27076530456543,
             "_randomizePositions": true,
             "_randomness": 1.0,
             "_paintOnSurfaceToolSettings": {
@@ -642,7 +642,7 @@
                 "_max": 60.0
             },
             "_terrainLayerIds": [],
-            "_showPreview": false
+            "_showPreview": true
         }
     },
     "_gravityToolManager": {
@@ -2852,15 +2852,15 @@
         "_settings": {
             "_snappingEnabled": false,
             "_snappingOn": {
-                "x": false,
-                "y": false,
+                "x": true,
+                "y": true,
                 "z": false
             },
             "_visibleGrid": false,
             "_gridOn": {
                 "x": false,
-                "y": true,
-                "z": false
+                "y": false,
+                "z": true
             },
             "_lockedGrid": false,
             "_step": {
@@ -2870,7 +2870,7 @@
             },
             "_origin": {
                 "x": 0.0,
-                "y": 0.0,
+                "y": 16.000513076782228,
                 "z": 0.0
             },
             "_rotation": {
